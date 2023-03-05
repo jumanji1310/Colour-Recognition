@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import os
-from scipy import stats
+import pandas as pd
 from sklearn.neighbors import KNeighborsClassifier
 
 #Loading training data               
@@ -40,8 +40,8 @@ for filename in os.listdir("./test_img"):
                     coord[0]-patch_offset:coord[0]+patch_offset]
         patch_pixels = patch.reshape((-1, 3))
         predicted_labels = model.predict(patch_pixels)
-        patch_color, _ = stats.mode(predicted_labels)
-        patch_colour_list += f'{patch_color[0]} '
+        patch_color = pd.DataFrame.mode(pd.DataFrame(predicted_labels))
+        patch_colour_list += f'{patch_color[0][0]} '
 
     # add text
     img = cv2.putText(img, patch_colour_list, (20,400),cv2.FONT_HERSHEY_SIMPLEX, 0.6,(255,0,0),  2 )
